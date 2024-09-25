@@ -3,11 +3,13 @@ import { Activity } from "../models/activity";
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
-        setTimeout(resolve, delay)
+        setTimeout(resolve, delay);
     })
 }
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
+
+const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 axios.interceptors.response.use(async response => {
     try {
@@ -17,16 +19,13 @@ axios.interceptors.response.use(async response => {
         console.log(error);
         return await Promise.reject(error);
     }
-}
-)
-
-const responseBody = (response: AxiosResponse) => response.data;
+})
 
 const requests = {
     get: <T> (url: string) => axios.get<T>(url).then(responseBody),
     post: <T> (url: string, body: {}) => axios.post<T>(url, body).then(responseBody),
     put: <T> (url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
-    del: <T> (url: string) => axios.delete<T>(url).then(responseBody),
+    del: <T> (url: string) => axios.delete<T>(url).then(responseBody)
 }
 
 const Activities = {
